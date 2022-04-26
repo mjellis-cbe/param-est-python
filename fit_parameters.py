@@ -1,10 +1,11 @@
 """Fit parameters"""
+from typing import Dict
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import least_squares
 
 
-def lhhw_model(data: dict[str, np.ndarray]) -> np.ndarray:
+def lhhw_model(data: Dict[str, np.ndarray]) -> np.ndarray:
     """LHHW model"""
 
     r_t = 8.314 * data["T"]
@@ -18,7 +19,7 @@ def lhhw_model(data: dict[str, np.ndarray]) -> np.ndarray:
 
 
 def power_model(
-    data: dict[str, np.ndarray], params: dict[str, float]
+    data: Dict[str, np.ndarray], params: Dict[str, float]
 ) -> np.ndarray:
     """Power model"""
     r_t = 8.314 * data["T"]
@@ -32,7 +33,7 @@ def power_model(
 PARAM_NAMES = ["k0", "Ea", "alpha", "beta"]
 
 
-def residual(params: np.ndarray, data: dict) -> np.ndarray:
+def residual(params: np.ndarray, data: Dict[str, np.ndarray]) -> np.ndarray:
     """Return the residual value"""
     params = dict(zip(PARAM_NAMES, params))
     return power_model(data, params) - lhhw_model(data)
@@ -40,7 +41,7 @@ def residual(params: np.ndarray, data: dict) -> np.ndarray:
 
 def create_mesh(
     temp: np.ndarray, p_meoh: np.ndarray, p_h2o: np.ndarray
-) -> dict[str, np.ndarray]:
+) -> Dict[str, np.ndarray]:
     """Return mesh grid with data"""
     vals = np.meshgrid(temp, p_meoh, p_h2o)
     return {
